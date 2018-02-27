@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        tools:context="com.ghostwan.robotsdk.MainActivity">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="horizontal"
+                  android:layout_height="wrap_content">
+        <Button
+                android:text="Say hello"
+                android:onClick="onSayHello"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <Button
+                android:text="Listen and talk"
+                android:onClick="onListenAndTalk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onStopEverything"
+                android:text="Stop everything"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onStopSpeaking"
+                android:text="Stop speaking"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onStopMoving"
+                android:text="Stop moving"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onStopGoing"
+                android:text="Stop going"/>
+    </LinearLayout>
+
+</LinearLayout>
