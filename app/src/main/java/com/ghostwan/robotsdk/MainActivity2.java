@@ -7,19 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import com.ghostwan.robotsdk.sdk.*;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class MainActivity2 extends AppCompatActivity {
 
     private Pepper myPepper;
     private Location theKitchen = new Location();
-    private TaskRunner runner = new TaskRunner();
+    private ExecutorService executor = Executors.newWorkStealingPool();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myPepper = new MyPepper();
-        runner.run( () -> myPepper.connect());
-
+        executor.submit(() -> myPepper.connect());
     }
 
     public void onSayHello(View view) {
@@ -28,23 +31,23 @@ public class MainActivity extends AppCompatActivity {
             myPepper.animate(R.raw.dog_a001);
             myPepper.goTo(theKitchen);
         };
-        runner.run(task);
+        executor.submit(task);
     }
 
     public void onStopEverything(View view) {
-        runner.run( () -> myPepper.stop());
+        executor.submit( () -> myPepper.stop());
     }
 
     public void onStopSpeaking(View view) {
-        runner.run( () -> myPepper.stopSpeaking());
+        executor.submit(() -> myPepper.stopSpeaking());
     }
 
     public void onStopMoving(View view) {
-        runner.run( () -> myPepper.stopMoving());
+        executor.submit( () -> myPepper.stopMoving());
     }
 
     public void onStopGoing(View view) {
-        runner.run( () -> myPepper.stopGoing());
+        executor.submit(() -> myPepper.stopGoing());
     }
 
     public void onListenAndTalk(View view) {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.string.what_are_you_doing : myPepper.say("Nothing what about you ?"); break;
             }
         };
-        runner.run(task);
+        executor.submit(task);
     }
 
 
@@ -67,6 +70,6 @@ public class MainActivity extends AppCompatActivity {
         Task taskParallel = Task.parallel(sayTask, animateTask);
         Task taskIterative = Task.iterative(sayTask, animateTask);
 
-        runner.run(taskParallel);
+        executor.submit(taskParallel);
     }
 }

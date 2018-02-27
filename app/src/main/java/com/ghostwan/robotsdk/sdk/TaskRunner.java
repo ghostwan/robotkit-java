@@ -9,4 +9,9 @@ public class TaskRunner {
     public void run(Task task) {
 
     }
+
+    public void stop(Task task) {
+
+    }
+
 }

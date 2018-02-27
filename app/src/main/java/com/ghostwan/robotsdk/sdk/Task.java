@@ -5,6 +5,16 @@ package com.ghostwan.robotsdk.sdk;
  */
 
 @FunctionalInterface
-public interface Task {
-    void run();
+public interface Task extends Runnable{
+
+    static Task parallel(Task ...tasks) {
+        return () -> {
+
+        };
+    }
+
+    static Task iterative(Task ...tasks) {
+        return null;
+    }
+
 }

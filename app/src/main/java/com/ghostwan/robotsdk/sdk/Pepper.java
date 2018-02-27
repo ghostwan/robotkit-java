@@ -1,6 +1,8 @@
 package com.ghostwan.robotsdk.sdk;
 
 
+import android.support.annotation.StringRes;
+
 /**
  * Created by erwan on 27/02/2018.
  */
@@ -59,6 +61,10 @@ public class Pepper {
     }
 
     public void doTask(Object say, String s) {
+
+    }
+
+    public void say(@StringRes Integer phrase) {
 
     }
 }
