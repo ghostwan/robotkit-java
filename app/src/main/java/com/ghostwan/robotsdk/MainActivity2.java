@@ -9,7 +9,6 @@ import com.ghostwan.robotsdk.sdk.*;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -21,8 +20,20 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         myPepper = new MyPepper();
-        executor.submit(() -> myPepper.connect());
+        myPepper.setOnHumanAround((human) -> {
+            Task task = () -> {
+                myPepper.stop();
+                myPepper.say(R.string.someone_here);
+                myPepper.engage(human);
+            };
+            executor.submit(task);
+        });
+        executor.submit(() -> {
+            myPepper.connect();
+        });
+
     }
 
     public void onSayHello(View view) {
