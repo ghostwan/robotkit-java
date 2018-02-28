@@ -5,34 +5,21 @@ import android.support.annotation.RawRes;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import com.aldebaran.qi.Promise;
 import com.ghostwan.robotsdk.sdk.*;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class MainActivity2 extends AppCompatActivity {
+public class TestActivity extends AppCompatActivity {
 
     private Pepper myPepper;
     private Location theKitchen = new Location();
-    private ExecutorService executor = Executors.newWorkStealingPool();
+    private TaskRunner runner = new TaskRunner();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_scenario);
         myPepper = new MyPepper();
-        myPepper.setOnHumanAround((human) -> {
-            Task task = () -> {
-                myPepper.stop();
-                myPepper.say(R.string.someone_here);
-                myPepper.engage(human);
-            };
-            executor.submit(task);
-        });
-        executor.submit(() -> {
-            myPepper.connect();
-        });
+        runner.run( () -> myPepper.connect(TestActivity.this));
 
     }
 
@@ -42,23 +29,11 @@ public class MainActivity2 extends AppCompatActivity {
             myPepper.animate(R.raw.dog_a001);
             myPepper.goTo(theKitchen);
         };
-        executor.submit(task);
+        runner.run(task);
     }
 
     public void onStopEverything(View view) {
-        executor.submit( () -> myPepper.stop());
-    }
-
-    public void onStopSpeaking(View view) {
-        executor.submit(() -> myPepper.stopSpeaking());
-    }
-
-    public void onStopMoving(View view) {
-        executor.submit( () -> myPepper.stopMoving());
-    }
-
-    public void onStopGoing(View view) {
-        executor.submit(() -> myPepper.stopGoing());
+        runner.run( () -> myPepper.stop());
     }
 
     public void onListenAndTalk(View view) {
@@ -70,7 +45,7 @@ public class MainActivity2 extends AppCompatActivity {
                 case R.string.what_are_you_doing : myPepper.say("Nothing what about you ?"); break;
             }
         };
-        executor.submit(task);
+        runner.run(task);
     }
 
 
@@ -79,8 +54,12 @@ public class MainActivity2 extends AppCompatActivity {
         Task animateTask = () -> myPepper.animate(animation);
 
         Task taskParallel = Task.parallel(sayTask, animateTask);
-        Task taskIterative = Task.iterative(sayTask, animateTask);
+//        Task taskIterative = Task.iterative(sayTask, animateTask);
 
-        executor.submit(taskParallel);
+        runner.run(taskParallel);
+    }
+
+    public void onSpeakAndMove(View view) {
+        speakAndMove(R.string.hello_pepper, R.raw.exclamation_both_hands_a003);
     }
 }

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.ghostwan.robotsdk.sdk.*;
 
-public class MainActivity3 extends AppCompatActivity {
+public class ScenarioActivity extends AppCompatActivity {
 
     private TaskRunner runner = new TaskRunner();
 
@@ -14,13 +14,13 @@ public class MainActivity3 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_scenario);
         myPepper = new MyPepper();
         nao = new Nao("nono.local");
 
         runner.start(() -> {
-            myPepper.connect();
-            nao.connect();
+            myPepper.connect(ScenarioActivity.this);
+            nao.connect(ScenarioActivity.this);
 
             myPepper.say("Hello Nao!");
             nao.say("Hello Pepper!");
@@ -69,7 +69,7 @@ public class MainActivity3 extends AppCompatActivity {
             Location location = myPepper.createLocation(10, 20, 30);
             myPepper.goTo(location);
 
-            Animation animation = myPepper.createAnimation(R.raw.dog_a001);
+            QiAnimation animation = myPepper.createAnimation(R.raw.dog_a001);
             animation.getDuration();
             animation.getLabels();
             myPepper.animate(animation);

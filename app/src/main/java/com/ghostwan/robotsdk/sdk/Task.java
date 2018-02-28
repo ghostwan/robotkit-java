@@ -9,12 +9,18 @@ public interface Task extends Runnable{
 
     static Task parallel(Task ...tasks) {
         return () -> {
-
+            for (Task task : tasks) {
+                new Thread(task::run).start();
+            }
         };
     }
 
     static Task iterative(Task ...tasks) {
-        return null;
+        return () -> {
+            for (Task task : tasks) {
+                task.run();
+            }
+        };
     }
 
 }

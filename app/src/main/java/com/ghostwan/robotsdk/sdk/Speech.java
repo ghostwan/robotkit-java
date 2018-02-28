@@ -5,7 +5,18 @@ package com.ghostwan.robotsdk.sdk;
  */
 
 public class Speech {
+
+    private String data;
+
+    public Speech(String data) {
+        this.data = data;
+    }
+
     public void setOnStartListener(Runnable runnable) {
 
+    }
+
+    public String getData() {
+        return data;
     }
 }
