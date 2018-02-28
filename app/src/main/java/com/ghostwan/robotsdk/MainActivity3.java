@@ -35,7 +35,7 @@ public class MainActivity3 extends AppCompatActivity {
                 }
                 else {
                     nao.say("Désolé je ne sais pas!");
-                    myPepper.say("Je ne peux rien faire, aurevoir!");
+                    myPepper.say("Je ne peux rien faire, au revoir!");
                     finish();
                 }
             }
