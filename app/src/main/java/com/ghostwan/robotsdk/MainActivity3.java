@@ -29,14 +29,15 @@ public class MainActivity3 extends AppCompatActivity {
             if(theKitchen == null) {
                 myPepper.say("Nao dis moi! Sais tu ou se trouve la cuisine ?");
                 theKitchen = nao.getLocation("kitchen");
-                if(theKitchen == null)
+                if(theKitchen != null) {
                     nao.say("Oui je t'envoie ça!");
+                    myPepper.rememberLocation("kitchen", theKitchen);
+                }
                 else {
                     nao.say("Désolé je ne sais pas!");
                     myPepper.say("Je ne peux rien faire, aurevoir!");
                     finish();
                 }
-                myPepper.rememberLocation("kitchen", theKitchen);
             }
 
             myPepper.say("Suis moi Nao!");
