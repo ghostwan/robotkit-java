@@ -2,6 +2,7 @@ package com.ghostwan.robotsdk;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import com.ghostwan.robotsdk.sdk.*;
 
 public class ScenarioActivity extends AppCompatActivity {
@@ -48,7 +49,8 @@ public class ScenarioActivity extends AppCompatActivity {
             Task t1 = () -> myPepper.say("Nous voilà dans la cuisine!");
             Task t2 = () -> myPepper.animate(R.raw.exclamation_both_hands_a003);
             Task t3 = () -> nao.animate(R.raw.exclamation_both_hands_a003);
-            runner.run(Task.parallel(t1,t2, t3));
+
+            Tasks.parallel(t1, t2, t3).execute();
 
             Human human = myPepper.waitForHuman();
             myPepper.engage(human);

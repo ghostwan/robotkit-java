@@ -33,9 +33,9 @@ public class Robot {
     private static final String TAG = "Robot";
     private QiContext qiContext;
     private Promise<Void> connectionPromise;
-    private Future sayFuture;
-    private Future animateFuture;
-    private Future gotoFuture;
+    private Future<Void> sayFuture;
+    private Future<Void> animateFuture;
+    private Future<Void> gotoFuture;
     private Future<ListenResult> listenFuture;
 
 

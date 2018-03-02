@@ -17,9 +17,9 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scenario);
+        setContentView(R.layout.activity_test);
         myPepper = new MyPepper();
-        runner.run( () -> myPepper.connect(TestActivity.this));
+        runner.start( () -> myPepper.connect(TestActivity.this));
 
     }
 
@@ -29,7 +29,7 @@ public class TestActivity extends AppCompatActivity {
             myPepper.animate(R.raw.dog_a001);
             myPepper.goTo(theKitchen);
         };
-        runner.run(task);
+        runner.start(task);
     }
 
     public void onStopEverything(View view) {
@@ -45,7 +45,7 @@ public class TestActivity extends AppCompatActivity {
                 case R.string.what_are_you_doing : myPepper.say("Nothing what about you ?"); break;
             }
         };
-        runner.run(task);
+        runner.start(task);
     }
 
 
@@ -53,10 +53,10 @@ public class TestActivity extends AppCompatActivity {
         Task sayTask = () -> myPepper.say(phrase);
         Task animateTask = () -> myPepper.animate(animation);
 
-        Task taskParallel = Task.parallel(sayTask, animateTask);
+        Task taskParallel = Tasks.parallel(sayTask, animateTask);
 //        Task taskIterative = Task.iterative(sayTask, animateTask);
 
-        runner.run(taskParallel);
+        runner.start(taskParallel);
     }
 
     public void onSpeakAndMove(View view) {

@@ -19,14 +19,14 @@ public class TaskRunner {
 
     public void run(Task task){
         try {
-            executorService.submit(task).get();
+            executorService.submit(task::execute).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new TaskInterruptedException();
         }
     }
 
     public void start(Task task) {
-        currentFuture = executorService.submit(task);
+        currentFuture = executorService.submit(task::execute);
     }
 
     public void stopCurrent() {
