@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.RawRes;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import com.aldebaran.qi.Promise;
 import com.ghostwan.robotsdk.sdk.*;
+import com.ghostwan.robotsdk.sdk.exception.RuntimeExecutionException;
 
 public class TestActivity extends AppCompatActivity {
 
+    private static final String TAG = "TestActivity";
     private Pepper myPepper;
-    private Location theKitchen = new Location();
     private TaskRunner runner = new TaskRunner();
 
     @Override
@@ -19,15 +20,28 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         myPepper = new MyPepper();
-        runner.start( () -> myPepper.connect(TestActivity.this));
+        runner.start(() -> {
+            try {
+                myPepper.connect(TestActivity.this);
+                runOnUiThread(() -> findViewById(R.id.layout).setVisibility(View.VISIBLE));
+            } catch (RuntimeExecutionException e) {
+                Log.e(TAG, "error :", e);
+            }
+        });
+    }
 
+    @Override
+    protected void onDestroy() {
+        myPepper.disconnect(this);
+        super.onDestroy();
     }
 
     public void onSayHello(View view) {
         Task task = () -> {
             myPepper.say("Hello world");
             myPepper.animate(R.raw.dog_a001);
-            myPepper.goTo(theKitchen);
+            myPepper.animate(R.raw.dog_a001);
+            myPepper.animate(R.raw.dog_a001);
         };
         runner.start(task);
     }

@@ -56,7 +56,7 @@ public class Robot {
     }
     private void checkReady(Future future, Class clazz) {
         checkReady();
-        if(future != null || !future.isDone()) {
+        if(future != null && !future.isDone()) {
             Constructor<?> ctor;
             try {
                 ctor = clazz.getConstructor(clazz);
@@ -88,12 +88,18 @@ public class Robot {
 
             @Override
             public void onRobotFocusGained(QiContext qiContext) {
+                Log.i(TAG, "Focus retrieved");
                 Robot.this.qiContext = qiContext;
-                connectionPromise.setValue(null);
+                try {
+                    connectionPromise.setValue(null);
+                } catch (Exception e) {
+                    Log.e(TAG, "error :", e);
+                }
             }
 
             @Override
             public void onRobotFocusLost() {
+                Log.w(TAG, "Focus lost");
                 Robot.this.qiContext = null;
                 if(lostListener != null)
                     lostListener.run();
@@ -101,6 +107,7 @@ public class Robot {
 
             @Override
             public void onRobotFocusRefused(String reason) {
+                Log.e(TAG, "Focus refused: "+reason);
                 connectionPromise.setError(reason);
             }
         });
@@ -109,6 +116,11 @@ public class Robot {
         } catch (ExecutionException e) {
             throw new RuntimeExecutionException(e);
         }
+        Log.i(TAG, "Robot connected");
+    }
+
+    public void disconnect(Activity activity) {
+        QiSDK.unregister(activity);
     }
 
     public void stop() {
@@ -116,6 +128,7 @@ public class Robot {
         cancelFuture(animateFuture);
         cancelFuture(listenFuture);
         cancelFuture(gotoFuture);
+        Log.i(TAG, "Stopping robot");
     }
 
     public void shutUp() {
@@ -131,9 +144,13 @@ public class Robot {
 
 
     public void say(String phrase) {
-        checkReady(sayFuture, RobotAlreadySpeakingException.class);
-        sayFuture = SayBuilder.with(qiContext).withText(phrase).build().async().run();
-        checkFuture(sayFuture);
+        try {
+            checkReady(sayFuture, RobotAlreadySpeakingException.class);
+            sayFuture = SayBuilder.with(qiContext).withText(phrase).build().async().run();
+            checkFuture(sayFuture);
+        } catch (Exception e) {
+            Log.e(TAG, "error :", e);
+        }
     }
 
     public void say(@StringRes Integer phrase) {
